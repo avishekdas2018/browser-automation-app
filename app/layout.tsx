@@ -33,6 +33,7 @@ export default function RootLayout({
         <ClerkProvider
           afterSignOutUrl={"/sign-in"}
           appearance={{ theme: shadcn }}
+          taskUrls={{ "choose-organization": "/choose-organization" }}
         >
           <ThemeProvider>
             {children}
