@@ -1,4 +1,5 @@
-import { PlusIcon, WorkflowIcon } from "lucide-react"
+import Link from "next/link"
+import { RotateCw, SearchXIcon, Undo2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -9,25 +10,25 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty"
-import { auth } from "@clerk/nextjs/server"
 
-export default async function Page() {
-  await auth.protect()
+export default function NotFound() {
   return (
     <Empty className="min-h-svh border-none">
       <EmptyHeader>
         <EmptyMedia variant="icon">
-          <WorkflowIcon />
+          <SearchXIcon />
         </EmptyMedia>
-        <EmptyTitle>No workflow selected </EmptyTitle>
+        <EmptyTitle>Workflow not found</EmptyTitle>
         <EmptyDescription>
-          Select a workflow from the sidebar or create a new one to get started.
+          The workflow you are looking for does not exist or has been deleted.
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
-        <Button>
-          <PlusIcon />
-          New workflow
+        <Button asChild>
+          <span>
+            <Undo2 />
+            <Link href="/">Return home</Link>
+          </span>
         </Button>
       </EmptyContent>
     </Empty>

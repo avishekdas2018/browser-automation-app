@@ -1,6 +1,8 @@
 "use client"
 
 import * as React from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { PlusIcon, WorkflowIcon, Loader2Icon } from "lucide-react"
 
 import { generateSlug } from "@/features/workflows/lib/generate-slug"
@@ -30,6 +32,7 @@ interface WorkflowNavProps {
 
 export function WorkflowNav({ workflows, createWorkflowAction }: WorkflowNavProps) {
   const { state } = useSidebar()
+  const pathname = usePathname()
   const [isPending, startTransition] = React.useTransition()
 
   const handleCreate = () => {
@@ -63,8 +66,10 @@ export function WorkflowNav({ workflows, createWorkflowAction }: WorkflowNavProp
                     </SidebarMenuItem>
                     {workflows.map((workflow) => (
                       <SidebarMenuItem key={workflow.id}>
-                        <SidebarMenuButton>
-                          <span>{workflow.name}</span>
+                        <SidebarMenuButton asChild isActive={pathname === `/workflows/${workflow.id}`}>
+                          <Link href={`/workflows/${workflow.id}`}>
+                            <span>{workflow.name}</span>
+                          </Link>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     ))}
@@ -89,8 +94,10 @@ export function WorkflowNav({ workflows, createWorkflowAction }: WorkflowNavProp
         <SidebarMenu className="gap-y-1">
           {workflows.map((workflow) => (
             <SidebarMenuItem key={workflow.id}>
-              <SidebarMenuButton>
-                <span>{workflow.name}</span>
+              <SidebarMenuButton asChild isActive={pathname === `/workflows/${workflow.id}`}>
+                <Link href={`/workflows/${workflow.id}`}>
+                  <span>{workflow.name}</span>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
