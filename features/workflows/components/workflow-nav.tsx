@@ -19,22 +19,14 @@ import {
   SidebarSeparator,
   useSidebar,
 } from "@/components/ui/sidebar"
+import type { Workflow } from "@/lib/db/schema"
 
-const workflows = [
-  "dominant-wasp",
-  "honest-reindeer",
-  "expected-llama",
-  "essential-ocelot",
-  "creepy-echidna",
-  "eastern-silkworm",
-  "cultural-lion",
-  "proud-weasel",
-  "regional-bonobo",
-]
+interface WorkflowNavProps {
+  workflows: Workflow[]
+}
 
-export function WorkflowNav() {
+export function WorkflowNav({ workflows }: WorkflowNavProps) {
   const { state } = useSidebar()
-  const [activeWorkflow, setActiveWorkflow] = React.useState(workflows[0])
 
   if (state === "collapsed") {
     return (
@@ -59,12 +51,9 @@ export function WorkflowNav() {
                       <SidebarSeparator className="mx-0" />
                     </SidebarMenuItem>
                     {workflows.map((workflow) => (
-                      <SidebarMenuItem key={workflow}>
-                        <SidebarMenuButton
-                          isActive={workflow === activeWorkflow}
-                          onClick={() => setActiveWorkflow(workflow)}
-                        >
-                          <span>{workflow}</span>
+                      <SidebarMenuItem key={workflow.id}>
+                        <SidebarMenuButton>
+                          <span>{workflow.name}</span>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     ))}
@@ -88,12 +77,9 @@ export function WorkflowNav() {
       <SidebarGroupContent>
         <SidebarMenu className="gap-y-1">
           {workflows.map((workflow) => (
-            <SidebarMenuItem key={workflow}>
-              <SidebarMenuButton
-                isActive={workflow === activeWorkflow}
-                onClick={() => setActiveWorkflow(workflow)}
-              >
-                <span>{workflow}</span>
+            <SidebarMenuItem key={workflow.id}>
+              <SidebarMenuButton>
+                <span>{workflow.name}</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
