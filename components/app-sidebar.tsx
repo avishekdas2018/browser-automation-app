@@ -4,6 +4,7 @@ import { auth } from "@clerk/nextjs/server"
 
 import { WorkflowNav } from "@/features/workflows/components/workflow-nav"
 import { listWorkflows } from "@/features/workflows/data"
+import { createWorkflowAction } from "@/features/workflows/actions"
 import {
   Sidebar,
   SidebarContent,
@@ -32,7 +33,7 @@ export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sideb
       </SidebarHeader>
 
       <SidebarContent>
-        <WorkflowNav workflows={workflows} />
+        <WorkflowNav workflows={workflows} createWorkflowAction={createWorkflowAction} />
       </SidebarContent>
 
       <SidebarFooter className="group-data-[collapsible=icon]:items-center">

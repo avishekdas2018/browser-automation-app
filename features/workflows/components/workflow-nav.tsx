@@ -1,7 +1,9 @@
 "use client"
 
 import * as React from "react"
-import { PlusIcon, WorkflowIcon } from "lucide-react"
+import { PlusIcon, WorkflowIcon, Loader2Icon } from "lucide-react"
+
+import { generateSlug } from "@/features/workflows/lib/generate-slug"
 
 import {
   Popover,
@@ -23,10 +25,19 @@ import type { Workflow } from "@/lib/db/schema"
 
 interface WorkflowNavProps {
   workflows: Workflow[]
+  createWorkflowAction: (name: string) => Promise<void>
 }
 
-export function WorkflowNav({ workflows }: WorkflowNavProps) {
+export function WorkflowNav({ workflows, createWorkflowAction }: WorkflowNavProps) {
   const { state } = useSidebar()
+  const [isPending, startTransition] = React.useTransition()
+
+  const handleCreate = () => {
+    startTransition(async () => {
+      const slug = generateSlug()
+      await createWorkflowAction(slug)
+    })
+  }
 
   if (state === "collapsed") {
     return (
@@ -44,8 +55,8 @@ export function WorkflowNav({ workflows }: WorkflowNavProps) {
                 <PopoverContent side="right" align="start" className="p-1">
                   <SidebarMenu className="gap-y-1">
                     <SidebarMenuItem className="pb-2">
-                      <SidebarMenuButton>
-                        <PlusIcon />
+                      <SidebarMenuButton onClick={handleCreate} disabled={isPending}>
+                        {isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
                         <span>New workflow</span>
                       </SidebarMenuButton>
                       <SidebarSeparator className="mx-0" />
@@ -70,8 +81,8 @@ export function WorkflowNav({ workflows }: WorkflowNavProps) {
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Workflows</SidebarGroupLabel>
-      <SidebarGroupAction title="New workflow">
-        <PlusIcon />
+      <SidebarGroupAction title="New workflow" onClick={handleCreate} disabled={isPending}>
+        {isPending ? <Loader2Icon className="animate-spin" /> : <PlusIcon />}
         <span className="sr-only">New workflow</span>
       </SidebarGroupAction>
       <SidebarGroupContent>
