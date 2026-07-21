@@ -1,9 +1,16 @@
-import { notFound } from "next/navigation"
-
 import { WorkflowShell } from "@/features/workflows/components/workflow-shell"
+import { Room } from "@/features/workflows/components/room"
 
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
   const { id } = await params
-  
-  return <WorkflowShell workflowId={id} />
+
+  return (
+    <Room roomId={id}>
+      <WorkflowShell workflowId={id} />
+    </Room>
+  )
 }

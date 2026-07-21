@@ -1,8 +1,12 @@
 "use client"
 
 import "@xyflow/react/dist/style.css"
+import "@liveblocks/react-ui/styles.css"
+import "@liveblocks/react-flow/styles.css"
+
 import { useTheme } from "next-themes"
-import { useCallback, useSyncExternalStore } from "react"
+import { useSyncExternalStore } from "react"
+import { useLiveblocksFlow, Cursors } from "@liveblocks/react-flow"
 
 import {
   ReactFlow,
@@ -11,8 +15,6 @@ import {
   addEdge,
   Edge,
   Connection,
-  useNodesState,
-  useEdgesState,
   ConnectionLineType,
   ColorMode,
   NodeTypes,
@@ -43,25 +45,12 @@ export function WorkflowCanvas() {
     () => false
   )
 
-  const [nodes, , setNodes] = useNodesState(initialNodes)
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
-
-  // const onNodesChange = useCallback(
-  //   (changes: NodeChange[]) =>
-  //     setNodes((nds) => applyNodeChanges(changes, nds)),
-  //   [setNodes]
-  // )
-
-  // const onEdgesChange = useCallback(
-  //   (changes: EdgeChange[]) =>
-  //     setEdges((eds) => applyEdgeChanges(changes, eds)),
-  //   [setEdges]
-  // )
-
-  const onConnect = useCallback(
-    (params: Connection) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges]
-  )
+  const { nodes, edges, onNodesChange, onEdgesChange, onConnect, onDelete } =
+    useLiveblocksFlow({
+      suspense: true,
+      nodes: { initial: initialNodes },
+      edges: { initial: initialEdges },
+    })
 
   return (
     <div className="size-full">
@@ -70,9 +59,10 @@ export function WorkflowCanvas() {
         colorMode={mounted ? (resolvedTheme as ColorMode) : "light"}
         nodes={nodes}
         edges={edges}
-        onNodesChange={setNodes}
+        onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        onDelete={onDelete}
         fitView
         connectionLineType={ConnectionLineType.SmoothStep}
         connectionLineStyle={{ stroke: "var( -- border)" }}
@@ -91,6 +81,7 @@ export function WorkflowCanvas() {
       >
         <Background />
         <Controls />
+        <Cursors />
       </ReactFlow>
     </div>
   )
