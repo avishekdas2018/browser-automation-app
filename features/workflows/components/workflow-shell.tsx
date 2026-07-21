@@ -1,3 +1,4 @@
+import { RightSidebar } from "./right-sidebar"
 import {
   ResizableHandle,
   ResizablePanel,
@@ -30,9 +31,7 @@ export function WorkflowShell({ workflowId }: WorkflowShellProps) {
       </ResizablePanel>
       <ResizableHandle />
       <ResizablePanel defaultSize="16rem" minSize="14rem" maxSize="36rem">
-        <div className="flex h-full items-center justify-center p-6">
-          <span className="font-semibold text-muted-foreground">Inspector</span>
-        </div>
+        <RightSidebar />
       </ResizablePanel>
     </ResizablePanelGroup>
   )
