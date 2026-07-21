@@ -1,39 +1,39 @@
 "use client"
 
+import "@xyflow/react/dist/style.css"
 import { useTheme } from "next-themes"
 import { useCallback, useSyncExternalStore } from "react"
 
-const emptySubscribe = () => () => {}
 import {
   ReactFlow,
   Controls,
   Background,
   addEdge,
-  Node,
   Edge,
   Connection,
   useNodesState,
   useEdgesState,
   ConnectionLineType,
   ColorMode,
+  NodeTypes,
 } from "@xyflow/react"
-import "@xyflow/react/dist/style.css"
 
-const initialNodes: Node[] = [
+import { StepNode } from "@/features/workflows/components/step-node"
+import type { StepNodeType } from "@/features/workflows/nodes/node-registry"
+
+const emptySubscribe = () => () => {}
+const nodeTypes: NodeTypes = { step: StepNode }
+
+const initialNodes: StepNodeType[] = [
   {
-    id: "1",
-    type: "input",
-    data: { label: "Start" },
-    position: { x: 250, y: 25 },
-  },
-  {
-    id: "2",
-    data: { label: "Do Something" },
-    position: { x: 250, y: 150 },
+    id: "start",
+    type: "step",
+    position: { x: 0, y: 0 },
+    data: { type: "start", kind: "trigger", title: "Start", values: {} },
   },
 ]
 
-const initialEdges: Edge[] = [{ id: "e1-2", source: "1", target: "2" }]
+const initialEdges: Edge[] = []
 
 export function WorkflowCanvas() {
   const { resolvedTheme } = useTheme()
@@ -66,6 +66,7 @@ export function WorkflowCanvas() {
   return (
     <div className="size-full">
       <ReactFlow
+        nodeTypes={nodeTypes}
         colorMode={mounted ? (resolvedTheme as ColorMode) : "light"}
         nodes={nodes}
         edges={edges}
