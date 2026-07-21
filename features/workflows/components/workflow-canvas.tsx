@@ -87,6 +87,7 @@ export function WorkflowCanvas() {
             "--xy-connectionline-stroke-width": 2,
           } as React.CSSProperties
         }
+        maxZoom={1}
       >
         <Background />
         <Controls />
