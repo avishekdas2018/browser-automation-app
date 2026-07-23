@@ -12,14 +12,13 @@ import {
   ReactFlow,
   Controls,
   Background,
-  addEdge,
   Edge,
-  Connection,
   ConnectionLineType,
   ColorMode,
   NodeTypes,
+  Panel,
 } from "@xyflow/react"
-
+import { AvatarStack } from "@liveblocks/react-ui"
 import { StepNode } from "@/features/workflows/components/step-node"
 import type { StepNodeType } from "@/features/workflows/nodes/node-registry"
 
@@ -82,6 +81,9 @@ export function WorkflowCanvas() {
         <Background />
         <Controls />
         <Cursors />
+        <Panel position="top-right">
+          <AvatarStack />
+        </Panel>
       </ReactFlow>
     </div>
   )
