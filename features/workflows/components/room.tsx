@@ -6,6 +6,9 @@ import {
   RoomProvider,
   ClientSideSuspense,
 } from "@liveblocks/react/suspense"
+import { Loader2 } from "lucide-react"
+
+import { useAuth } from "@clerk/nextjs"
 
 export function Room({
   children,
@@ -15,13 +18,15 @@ export function Room({
   roomId: string
 }) {
   return (
-    <LiveblocksProvider
-      publicApiKey={
-        "pk_dev_-9tQt39lk1lk8h-V3vs3qc_zaDuujGYTtyOs-krr7gNkpdP90FJBWD1F0otewQFv"
-      }
-    >
+    <LiveblocksProvider throttle={16} authEndpoint="/api/liveblocks/auth">
       <RoomProvider id={roomId}>
-        <ClientSideSuspense fallback={<div>Loading…</div>}>
+        <ClientSideSuspense
+          fallback={
+            <div>
+              <Loader2 className="animate-spin" />
+            </div>
+          }
+        >
           {children}
         </ClientSideSuspense>
       </RoomProvider>
