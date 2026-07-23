@@ -9,6 +9,7 @@ import {
 import { Loader2 } from "lucide-react"
 
 import { useAuth } from "@clerk/nextjs"
+import { Spinner } from "@/components/ui/spinner"
 
 export function Room({
   children,
@@ -22,8 +23,8 @@ export function Room({
       <RoomProvider id={roomId}>
         <ClientSideSuspense
           fallback={
-            <div>
-              <Loader2 className="animate-spin" />
+            <div className="flex min-h-svh items-center justify-center">
+              <Spinner className="size-6 text-muted-foreground" />
             </div>
           }
         >
