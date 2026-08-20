@@ -1,3 +1,4 @@
+import { ReactFlowProvider } from "@xyflow/react"
 import { WorkflowShell } from "@/features/workflows/components/workflow-shell"
 import { Room } from "@/features/workflows/components/room"
 import { auth } from "@clerk/nextjs/server"
@@ -35,8 +36,10 @@ export default async function Page({
   })
 
   return (
-    <Room roomId={id}>
-      <WorkflowShell workflowId={id} />
-    </Room>
+    <ReactFlowProvider>
+      <Room roomId={id}>
+        <WorkflowShell workflowId={id} />
+      </Room>
+    </ReactFlowProvider>
   )
 }

@@ -147,6 +147,9 @@ function Inspector({ node }: { node: StepNodeType | undefined }) {
 // Toolbar tab — adds nodes to the canvas, grouped by kind.
 // ---------------------------------------------------------------------------
 
+import { useReactFlow } from "@xyflow/react"
+import { toast } from "sonner"
+
 // The Toolbar's groups, one accordion section per node kind.
 const sections: { kind: StepNodeKind; label: string }[] = [
   { kind: "trigger", label: "Triggers" },
@@ -158,9 +161,50 @@ const definitions = Object.values(nodeRegistry)
 
 // The Toolbar tab: a button per node type that adds it to the canvas.
 function Palette() {
+  const { addNodes, getNodes, screenToFlowPosition } = useReactFlow()
+
   const add = (type: NodeType) => {
-    // TODO: add the clicked node to the canvas (one trigger max).
-    void type
+    const def = nodeRegistry[type]
+    const currentNodes = getNodes() as StepNodeType[]
+
+    if (def.kind === "trigger") {
+      const hasTrigger = currentNodes.some((n) => n.data?.kind === "trigger")
+      if (hasTrigger) {
+        toast.error("Only a single trigger node is allowed per workflow")
+        return
+      }
+    }
+
+    const sameTypeCount = currentNodes.filter(
+      (n) => n.data?.type === type
+    ).length
+
+    const pane = document.querySelector(".react-flow__pane")
+    const bounds = pane?.getBoundingClientRect() ?? {
+      left: 0,
+      top: 0,
+      width: typeof window !== "undefined" ? window.innerWidth : 1000,
+      height: typeof window !== "undefined" ? window.innerHeight : 800,
+    }
+
+    const position = screenToFlowPosition({
+      x: bounds.left + bounds.width / 2,
+      y: bounds.top + bounds.height / 2,
+    })
+
+    const newNode: StepNodeType = {
+      id: crypto.randomUUID(),
+      type: "step",
+      position,
+      data: {
+        type,
+        kind: def.kind,
+        title: `${def.label} ${sameTypeCount + 1}`,
+        values: {},
+      },
+    }
+
+    addNodes(newNode)
   }
 
   return (
