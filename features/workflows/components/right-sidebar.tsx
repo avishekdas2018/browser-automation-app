@@ -155,7 +155,6 @@ function Inspector({ node }: { node: StepNodeType | undefined }) {
 
 import { useReactFlow, useStore } from "@xyflow/react"
 import { toast } from "sonner"
-import { chownSync } from "fs"
 
 // The Toolbar's groups, one accordion section per node kind.
 const sections: { kind: StepNodeKind; label: string }[] = [
@@ -304,10 +303,15 @@ function RunButton() {
 export function RightSidebar() {
   const [tab, setTab] = useState("toolbar")
 
-  // TODO: read the currently selected node from React Flow.
   const selected = useStore((s) => s.nodes.find((n) => n.selected)) as
     StepNodeType | undefined
-  // TODO: auto-switch to the Editor tab when the selection changes.
+
+  const [prevSelectedId, setPrevSelectedId] = useState(selected?.id)
+
+  if (selected && selected?.id !== prevSelectedId) {
+    setPrevSelectedId(selected.id)
+    setTab("editor")
+  }
 
   return (
     <ResizablePanel
