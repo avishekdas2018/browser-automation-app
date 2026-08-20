@@ -147,7 +147,7 @@ function Inspector({ node }: { node: StepNodeType | undefined }) {
 // Toolbar tab — adds nodes to the canvas, grouped by kind.
 // ---------------------------------------------------------------------------
 
-import { useReactFlow } from "@xyflow/react"
+import { useReactFlow, useStore } from "@xyflow/react"
 import { toast } from "sonner"
 
 // The Toolbar's groups, one accordion section per node kind.
@@ -298,8 +298,8 @@ export function RightSidebar() {
   const [tab, setTab] = useState("toolbar")
 
   // TODO: read the currently selected node from React Flow.
-  const selected: StepNodeType | undefined = undefined
-
+  const selected = useStore((s) => s.nodes.find((n) => n.selected)) as
+    StepNodeType | undefined
   // TODO: auto-switch to the Editor tab when the selection changes.
 
   return (
