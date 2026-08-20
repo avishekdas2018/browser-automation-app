@@ -105,6 +105,7 @@ function FieldInput({
 
 // The Editor tab: one input per field on the selected node, or an empty state.
 function Inspector({ node }: { node: StepNodeType | undefined }) {
+  const { updateNodeData } = useReactFlow<StepNodeType>()
   if (!node) {
     return (
       <Section title="Editor">
@@ -131,8 +132,13 @@ function Inspector({ node }: { node: StepNodeType | undefined }) {
                 field={field}
                 value={values[field.key] ?? ""}
                 onChange={(value) => {
-                  // TODO: save the edit back onto the selected node.
-                  void value
+                  updateNodeData(node.id, {
+                    ...node.data,
+                    values: {
+                      ...node.data.values,
+                      [field.key]: value,
+                    },
+                  })
                 }}
               />
             </div>
@@ -149,6 +155,7 @@ function Inspector({ node }: { node: StepNodeType | undefined }) {
 
 import { useReactFlow, useStore } from "@xyflow/react"
 import { toast } from "sonner"
+import { chownSync } from "fs"
 
 // The Toolbar's groups, one accordion section per node kind.
 const sections: { kind: StepNodeKind; label: string }[] = [
